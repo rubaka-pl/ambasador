@@ -1,3 +1,11 @@
+# Ambasador PMB - WordPress Theme
+
+## Opis
+Jest to **motyw WordPress** stworzony dla systemu zarządzania promocjami, bonusami i użytkownikami. Motyw obsługuje rejestrację użytkowników, przypisanie promokodów oraz obliczanie bonusów na podstawie zakupów dokonanych przez użytkowników. 
+
+**Testowanie na WordPress Multisite:**  
+Motyw był testowany na instalacji **WordPress Multisite**, aby upewnić się, że działa poprawnie na wielu stronach w ramach jednej instalacji WordPress.
+
 1) Formularz kontaktowy działa na podstawie szablonu i 
 aktualnie jest skonfigurowany za pomocą formspree.io. 
 zmieniс ustawienia na prawidłową konfigurację SMTP (contacts.php , index.php)
