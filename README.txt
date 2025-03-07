@@ -75,29 +75,23 @@ DELIMITER ;
 
 
 
-4) zmienić metatagi Open Graph (header.php), ponieważ nie wiem, co dokładnie tam będzie.
 
-5) zmienić dane w pliku db.php
+4) zmienić dane w pliku db.php
 
 
 opis strony: 
 1) Działanie promokodu :
 Promokod jest przypisany do każdego użytkownika, który zarejestruje się na stronie. Użytkownik po zarejestrowaniu otrzymuje unikalny promokod, 
-który może udostępniać innym osobom. Każda osoba,
- która skorzysta z tego promokodu na stronie zakupu boxa przy zakupie na stronie PMB, 
-powoduje przyznanie bonusu dla osoby, która ten promokod posiada.
+który może udostępniać innym osobom.
 
 2) Obliczanie bonusu
 Po dokonaniu zakupu na stronie z użyciem promokodu, system oblicza bonus dla użytkownika, który posiada ten promokod.
-
-Za każdy zakupiony box, użytkownik otrzymuje 200 zł bonusu.
 Bonus jest dodawany do pola current_bonus w tabeli ambasador_pmb_users w bazie danych.
 
 3) Dodawanie i resetowanie bonusów
 Każdy zakup jest rejestrowany w tabeli ambasador_pmb_purchases, a bonusy są przypisywane na podstawie liczby boxow zakupionych przez użytkownika. Kiedy użytkownik zbiera bonusy, 
 administrator może ręcznie je przenosić do pola paid_bonus
  oraz resetować pole current_bonus, gdy bonusy zostaną wypłacone. (w Wordpres do tego powstanie nowa zakladka "bonusy"
-
 Administrator może ręcznie zresetować bonusy (czyli przenieść je z current_bonus do paid_bonus), 
 co oznacza, że bonusy zostały już wypłacone użytkownikowi.
 Pole current_bonus jest zresetowane, a wszystkie przyznane bonusy zostają zapisane w paid_bonus dla historii.
