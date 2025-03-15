@@ -1,4 +1,4 @@
-![preview](photo_2025-03-15_02-30-37.jpg)
+![preview](https://github.com/rubaka-pl/ambasador/blob/main/photo_2025-03-15_02-30-37.jpg?raw=true)
 
 This project is a comprehensive website designed for brand ambassadors to register, manage their accounts, and earn bonuses by promoting the company. Built on WordPress with custom PHP and MySQL, the platform features a seamless user experience, secure password recovery via SMTP email, and a robust promo code system that rewards ambassadors for every purchase made using their unique code.
 
