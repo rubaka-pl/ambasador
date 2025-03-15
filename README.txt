@@ -1,106 +1,44 @@
- Ambasador PMB - WordPress Theme
+This project is a comprehensive website designed for brand ambassadors to register, manage their accounts, and earn bonuses by promoting the company. Built on WordPress with custom PHP and MySQL, the platform features a seamless user experience, secure password recovery via SMTP email, and a robust promo code system that rewards ambassadors for every purchase made using their unique code.
 
- Opis
-Jest to motyw WordPress stworzony dla systemu zarządzania promocjami, bonusami i użytkownikami. Motyw obsługuje rejestrację użytkowników, przypisanie promokodów oraz obliczanie bonusów na podstawie zakupów dokonanych przez użytkowników. 
+Key Features
+1. User Registration
+Ambassadors can create an account and receive a unique promo code.
 
-Testowanie na WordPress Multisite:
-Motyw był testowany na instalacji WordPress Multisite, aby upewnić się, że działa poprawnie na wielu stronach w ramach jednej instalacji WordPress.
+User details and promo codes are securely stored in the ambasador_pmb_users table.
 
-1) Formularz kontaktowy działa na podstawie szablonu i 
-aktualnie jest skonfigurowany za pomocą formspree.io. 
-zmieniс ustawienia na prawidłową konfigurację SMTP (contacts.php , index.php)
+2. Promo Code Functionality
+Ambassadors share their promo code with customers.
 
-2) Database Setup
+For every purchase made using the promo code, the ambassador earns 200 PLN.
 
-ambasador_pmb_users Table:
+The system automatically tracks and calculates bonuses in real-time.
 
+3. Bonus Management
+Bonuses are stored in the current_bonus field and can be reset by administrators.
 
-CREATE TABLE ambasador_pmb_users (
-    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) COLLATE utf8mb4_general_ci NOT NULL,
-    password VARCHAR(255) COLLATE utf8mb4_general_ci NOT NULL,
-    email VARCHAR(100) COLLATE utf8mb4_general_ci NOT NULL,
-    promo_code VARCHAR(10) COLLATE utf8mb4_general_ci NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-    phone VARCHAR(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
-    facebook TINYINT(1) DEFAULT 0,
-    instagram TINYINT(1) DEFAULT 0,
-    recommend TINYINT(1) DEFAULT 0,
-    tiktok TINYINT(1) DEFAULT 0,
-    youtube TINYINT(1) DEFAULT 0,
-    other TINYINT(1) DEFAULT 0,
-    paid_bonus INT(11) NOT NULL DEFAULT 0,
-    current_bonus INT(11) NOT NULL DEFAULT 0
-);
+A dedicated "Bonuses" section in the WordPress admin panel allows for easy management of ambassador earnings.
 
+Administrators can transfer bonuses from current_bonus to paid_bonus once payments are processed.
 
-ambasador_pmb_purchases Table:
+4. Password Recovery
+Users can reset their passwords securely via SMTP email.
 
-CREATE TABLE ambasador_pmb_purchases (
-    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    order_id VARCHAR(50) COLLATE utf8mb4_general_ci NOT NULL,
-    promo_code VARCHAR(10) COLLATE utf8mb4_general_ci NOT NULL,
-    box_id VARCHAR(50) COLLATE utf8mb4_general_ci NOT NULL,
-    username VARCHAR(50) COLLATE utf8mb4_general_ci NOT NULL,
-    purchase_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-    quantity INT(11) NOT NULL DEFAULT 1
-);
+Passwords are hashed using password_hash() for enhanced security.
 
+5. Automated Workflows with SQL Triggers
+Two custom SQL triggers ensure seamless bonus calculations and data synchronization:
 
+after_purchase_insert: Automatically updates the ambassador's bonus when a new purchase is recorded.
 
+after_pmb_zamowienia_insert: Syncs order data to the purchases table when a new order is placed.
 
-3) Trigger for Bonus Calculation (sql)
+Technical Stack
+Frontend: HTML, CSS, JavaScript
 
-Kiedy nowy zakup boxa zostanie dodany do tabeli ambasador_pmb_purchases, 
-zostanie uruchomiony trigger, który zwiększy current_bonus ambasadora o 200 PLN 
-za każdy zakupiony produkt.
+Backend: PHP, WordPress
 
-DELIMITER //
+Database: MySQL
 
-CREATE TRIGGER after_purchase_insert
-AFTER INSERT ON ambasador_pmb_purchases
-FOR EACH ROW
-BEGIN
-    DECLARE user_id INT;
-    DECLARE bonus INT;
+Email: SMTP for secure password recovery and notifications
 
-    -- Find the user by promo_code and username
-    SELECT id INTO user_id
-    FROM ambasador_pmb_users
-    WHERE promo_code = NEW.promo_code AND username = NEW.username;
-
-    -- Calculate the bonus (200 for each item purchased)
-    SET bonus = NEW.quantity * 200;
-
-    -- Update the current_bonus for the user
-    UPDATE ambasador_pmb_users
-    SET current_bonus = current_bonus + bonus
-    WHERE id = user_id;
-END;
-
-//
-DELIMITER ;
-
-
-
-
-4) zmienić dane w pliku db.php
-
-
-opis strony: 
-1) Działanie promokodu :
-Promokod jest przypisany do każdego użytkownika, który zarejestruje się na stronie. Użytkownik po zarejestrowaniu otrzymuje unikalny promokod, 
-który może udostępniać innym osobom.
-
-2) Obliczanie bonusu
-Po dokonaniu zakupu na stronie z użyciem promokodu, system oblicza bonus dla użytkownika, który posiada ten promokod.
-Bonus jest dodawany do pola current_bonus w tabeli ambasador_pmb_users w bazie danych.
-
-3) Dodawanie i resetowanie bonusów
-Każdy zakup jest rejestrowany w tabeli ambasador_pmb_purchases, a bonusy są przypisywane na podstawie liczby boxow zakupionych przez użytkownika. Kiedy użytkownik zbiera bonusy, 
-administrator może ręcznie je przenosić do pola paid_bonus
- oraz resetować pole current_bonus, gdy bonusy zostaną wypłacone. (w Wordpres do tego powstanie nowa zakladka "bonusy"
-Administrator może ręcznie zresetować bonusy (czyli przenieść je z current_bonus do paid_bonus), 
-co oznacza, że bonusy zostały już wypłacone użytkownikowi.
-Pole current_bonus jest zresetowane, a wszystkie przyznane bonusy zostają zapisane w paid_bonus dla historii.
-
+Security: Password hashing (password_hash()), input sanitization, and validation
